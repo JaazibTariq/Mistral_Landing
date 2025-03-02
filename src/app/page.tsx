@@ -4,25 +4,16 @@ import type React from "react"
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   ArrowRight,
-  Brain,
-  Cpu,
-  Database,
-  Layers,
+
   Menu,
-  MessageSquare,
   X,
-  Zap,
   ChevronRight,
-  ExternalLink,
-  Globe,
-  Shield,
-  Sparkles,
+  
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useInView } from "react-intersection-observer"
 import { motion, useScroll, useTransform } from "framer-motion"
 import HeroSection from "@/components/HeroSection"
 import Features from "@/components/Features"
@@ -32,11 +23,9 @@ import InteractiveDemo from "@/components/InteractiveDemo"
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const heroRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
 
   // Parallax effect for hero section
-  const heroY = useTransform(scrollY, [0, 500], [0, -150])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,22 +43,6 @@ export default function Home() {
     const { clientX, clientY } = e
     setMousePosition({ x: clientX, y: clientY })
   }
-
-  // Scroll-triggered animations
-  const [featuresRef, featuresInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
-
-  const [solutionsRef, solutionsInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
-
-  const [demoRef, demoInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
  
 
   return (
@@ -276,7 +249,7 @@ export default function Home() {
                 >
                   <div className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-8 border border-white/5 relative h-full group-hover:border-white/20 transition-all duration-500">
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${testimonial.color}`}></div>
-                    <div className="absolute -left-2 -top-2 text-4xl text-white/20">"</div>
+                    <div className="absolute -left-2 -top-2 text-4xl text-white/20">&quot;</div>
                     <p className="text-white/80 mb-6 italic relative z-10">{testimonial.quote}</p>
                     <div className="relative z-10">
                       <p className="font-semibold text-white">{testimonial.author}</p>
@@ -525,27 +498,5 @@ export default function Home() {
   )
 }
 
-// Add this new component for animated text
-const AnimatedText = ({ text }: { text: string }) => {
-  return (
-    <motion.span
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, staggerChildren: 0.1 }}
-      className="inline-block"
-    >
-      {text.split("").map((char, index) => (
-        <motion.span
-          key={index}
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: index * 0.05 }}
-          className="inline-block"
-        >
-          {char}
-        </motion.span>
-      ))}
-    </motion.span>
-  )
-}
+
 

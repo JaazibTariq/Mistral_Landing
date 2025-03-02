@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Brain, MessageSquare, Database, Layers, Zap, Cpu } from "lucide-react";
-import { useState } from "react";
 
 const featuresData = [
   {

@@ -3,65 +3,60 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Brain, MessageSquare, Code, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface ParticleProps {
-  x: number;
-  y: number;
-  size: number;
-  duration: number;
-  delay: number;
-  color: string;
-}
 
 interface AnimatedTextProps {
   text: string;
 }
 
+// Memoized AnimatedText component with stable props
+const AnimatedText = memo(({ text }: AnimatedTextProps) => {
+  return (
+    <span className="inline-block">
+      {text.split('').map((char, index) => (
+        <motion.span
+          key={`${text}-${index}`} // Unique key based on text content
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: index * 0.03 }}
+          className="inline-block"
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </motion.span>
+      ))}
+    </span>
+  );
+});
+
+// Add displayName for better debugging
+AnimatedText.displayName = 'AnimatedText';
+
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ['start start', 'end start']
+    offset: ['start start', 'end start'],
   });
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
 
   // Generate particles with warm orange theme
- const [particles, setParticles] = useState<
-  Array<{ x: number; y: number; duration: number; delay: number; size: number; color: string }>
->([])
+  const [particles, setParticles] = useState<
+    Array<{ x: number; y: number; duration: number; delay: number; size: number; color: string }>
+  >([]);
 
-useEffect(() => {
-  // Generate particles only on the client side
-  const newParticles = Array(20)
-    .fill(null)
-    .map(() => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: Math.random() * 20 + 10,
-      delay: Math.random() * 5,
-      size: Math.random() * 10 + 5,
-      color: `hsla(${Math.random() * 60 + 200}, 70%, 60%, ${Math.random() * 0.3 + 0.1})`,
-    }))
-  setParticles(newParticles)
-}, [])
-
-  // Animated text component
-  const AnimatedText: React.FC<AnimatedTextProps> = memo(({ text }) => {
-    return (
-      <span className="inline-block">
-        {text.split("").map((char: string, index: number) => (
-          <motion.span
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.03 }}
-            className="inline-block"
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        ))}
-      </span>
-    );
-  });
+  useEffect(() => {
+    // Generate particles only on the client side
+    const newParticles = Array(20)
+      .fill(null)
+      .map(() => ({
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        duration: Math.random() * 20 + 10,
+        delay: Math.random() * 5,
+        size: Math.random() * 10 + 5,
+        color: `hsla(${Math.random() * 60 + 200}, 70%, 60%, ${Math.random() * 0.3 + 0.1})`,
+      }));
+    setParticles(newParticles);
+  }, []); // Empty dependency array ensures this only runs once on mount
 
   return (
     <motion.section
@@ -69,7 +64,7 @@ useEffect(() => {
       className="relative overflow-hidden bg-gradient-to-b from-black to-[#1A0000] py-20 md:py-32 lg:min-h-[90vh] flex items-center"
       style={{ y: heroY }}
     >
-      {/* Mountain silhouette background - similar to the reference image */}
+      {/* Mountain silhouette background */}
       <div className="absolute bottom-0 left-0 right-0 w-full h-72 bg-[url('/mountains-silhouette.svg')] bg-cover bg-bottom opacity-30 z-0"></div>
       
       {/* Animated particles */}
@@ -111,12 +106,11 @@ useEffect(() => {
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-8 leading-tight">
-              <span className="relative">
+              <span className="relative block">
                 <AnimatedText text="Intelligent Solutions" />
                 <span className="absolute -inset-1 bg-gradient-to-r from-[#FFD700]/20 via-[#FF8C00]/20 to-[#FF0000]/20 blur-xl opacity-50 animate-pulse"></span>
               </span>
-              <br />
-              <span className="bg-gradient-to-r from-white via-[#FFA500] to-white bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-white via-[#FFA500] to-white bg-clip-text text-transparent">
                 <AnimatedText text="In Your Hands" />
               </span>
             </h1>
@@ -141,7 +135,7 @@ useEffect(() => {
               size="lg"
               className="bg-gradient-to-r from-[#FFD700] to-[#FF4500] hover:from-[#FFA500] hover:to-[#FF0000] text-black font-medium rounded-full shadow-lg shadow-[#FF4500]/20 hover:shadow-[#FF4500]/40 transition-all duration-300 group"
             >
-              Talk to Ie
+              Talk to Ie Chat
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button
@@ -153,14 +147,13 @@ useEffect(() => {
             </Button>
           </motion.div>
 
-          {/* Floating cards grid - replacing previous cards with a 2x2 grid */}
+          {/* Floating cards grid */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
             className="relative grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
           >
-            {/* Card 1 */}
             <div className="bg-gradient-to-br from-[#FFD700]/10 to-[#FF4500]/10 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg hover:shadow-[#FFD700]/20 transform hover:scale-[1.02] transition-all duration-500 overflow-hidden group p-6">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FFD700] to-[#FF4500]"></div>
               <Brain className="h-8 w-8 text-[#FFD700] mb-4" />
@@ -170,7 +163,6 @@ useEffect(() => {
               </p>
             </div>
 
-            {/* Card 2 */}
             <div className="bg-gradient-to-br from-[#FF8C00]/10 to-[#FF0000]/10 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg hover:shadow-[#FF8C00]/20 transform hover:scale-[1.02] transition-all duration-500 overflow-hidden group p-6">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF8C00] to-[#FF0000]"></div>
               <MessageSquare className="h-8 w-8 text-[#FF8C00] mb-4" />
@@ -180,7 +172,6 @@ useEffect(() => {
               </p>
             </div>
 
-            {/* Card 3 */}
             <div className="bg-gradient-to-br from-[#FFA500]/10 to-[#FF4500]/10 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg hover:shadow-[#FFA500]/20 transform hover:scale-[1.02] transition-all duration-500 overflow-hidden group p-6">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FFA500] to-[#FF4500]"></div>
               <Code className="h-8 w-8 text-[#FFA500] mb-4" />
@@ -190,7 +181,6 @@ useEffect(() => {
               </p>
             </div>
 
-            {/* Card 4 */}
             <div className="bg-gradient-to-br from-[#FF7F50]/10 to-[#FF0000]/10 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg hover:shadow-[#FF7F50]/20 transform hover:scale-[1.02] transition-all duration-500 overflow-hidden group p-6">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF7F50] to-[#FF0000]"></div>
               <Shield className="h-8 w-8 text-[#FF7F50] mb-4" />
@@ -203,7 +193,7 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Gradient overlay at bottom - more subtle */}
+      {/* Gradient overlay at bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black via-black/90 to-transparent z-2"></div>
     </motion.section>
   );
