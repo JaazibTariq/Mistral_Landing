@@ -488,7 +488,7 @@ export default function Home() {
             <p className="text-white/60 text-sm">© {new Date().getFullYear()} Jaazib Tariq. All rights reserved.</p>
             <div className="mt-4 md:mt-0">
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Please note this is a duplicate of a Mistral Ai's landing page
+                Please note this is a duplicate of a Mistral Ai&apos;s landing page
               </Link>
             </div>
           </div>
