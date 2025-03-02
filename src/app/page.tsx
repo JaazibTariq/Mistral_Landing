@@ -485,10 +485,10 @@ export default function Home() {
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-white/60 text-sm">© {new Date().getFullYear()} Mistral AI. All rights reserved.</p>
+            <p className="text-white/60 text-sm">© {new Date().getFullYear()} Jaazib Tariq. All rights reserved.</p>
             <div className="mt-4 md:mt-0">
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Made with cutting-edge AI technology
+                Please note this is a duplicate of a Mistral Ai's landing page
               </Link>
             </div>
           </div>
